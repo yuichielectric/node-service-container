@@ -1,4 +1,4 @@
-# Sample NodeJS application
+# Node.js service in a Docker container
 
 For information on how to use this repository, see [JavaScript](https://docs.microsoft.com/vsts/pipelines/languages/javascript).
 
