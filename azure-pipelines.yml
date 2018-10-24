@@ -20,7 +20,6 @@ steps:
 
     azureContainerRegistry: '{"loginServer":"k8ssample97c8.azurecr.io", "id" : "/subscriptions/e4841790-d377-4dcf-9029-1b209f5d4029/resourceGroups/k8sSamplebbd6/providers/Microsoft.ContainerRegistry/registries/k8sSample97c8"}'
 
-steps:
 - task: Docker@0
   displayName: 'Push an image'
   inputs:
