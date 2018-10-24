@@ -9,7 +9,7 @@ pool:
 variables:
   imageName: 'your-container-image-name:$(build.buildId)'
 
-# steps:
+steps:
 # - script: docker build -f Dockerfile -t $(imageName) .
 #   displayName: 'docker build'
 
