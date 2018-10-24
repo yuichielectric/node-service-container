@@ -9,6 +9,39 @@ pool:
 variables:
   imageName: 'your-container-image-name:$(build.buildId)'
 
-steps:
-- script: docker build -f Dockerfile -t $(imageName) .
-  displayName: 'docker build'
+# steps:
+# - script: docker build -f Dockerfile -t $(imageName) .
+#   displayName: 'docker build'
+
+- task: AzureResourceGroupDeployment@2
+  displayName: 'Azure Deployment:Create Azure Container Registry'
+  inputs:
+    azureSubscription: 'k8sSample - Service Endpoint'
+
+    resourceGroupName: k8sSamplebbd6
+
+    location: japaneast
+
+    csmFile: '$(System.DefaultWorkingDirectory)/**/containerRegistry-template.json'
+
+    overrideParameters: '-registryName "k8sSample97c8" -registryLocation "South Central US" -registrySku "Standard"'
+
+- task: Docker@0
+  displayName: 'Build an image'
+  inputs:
+    azureSubscription: 'k8sSample - Service Endpoint'
+
+    azureContainerRegistry: k8ssample97c8.azurecr.io
+
+    imageName: 'k8ssample97c8.azurecr.io/k8ssample:$(Build.BuildId)'
+
+- task: Docker@0
+  displayName: 'Push an image'
+  inputs:
+    azureSubscription: 'k8sSample - Service Endpoint'
+
+    azureContainerRegistry: '{"loginServer":"k8ssample97c8.azurecr.io", "id" : "/subscriptions/e4841790-d377-4dcf-9029-1b209f5d4029/resourceGroups/k8sSamplebbd6/providers/Microsoft.ContainerRegistry/registries/k8sSample97c8"}'
+
+    action: 'Push an image'
+
+    imageName: 'k8ssample97c8.azurecr.io/k8ssample:$(Build.BuildId)'
