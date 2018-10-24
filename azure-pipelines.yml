@@ -13,35 +13,19 @@ steps:
 # - script: docker build -f Dockerfile -t $(imageName) .
 #   displayName: 'docker build'
 
-- task: AzureResourceGroupDeployment@2
-  displayName: 'Azure Deployment:Create Azure Container Registry'
-  inputs:
-    azureSubscription: '従量課金 (e4841790-d377-4dcf-9029-1b209f5d4029)'
-
-    resourceGroupName: k8sSamplebbd6
-
-    location: japaneast
-
-    csmFile: '$(System.DefaultWorkingDirectory)/**/containerRegistry-template.json'
-
-    overrideParameters: '-registryName "k8sSample97c8" -registryLocation "South Central US" -registrySku "Standard"'
-
 - task: Docker@0
   displayName: 'Build an image'
   inputs:
-    azureSubscription: '従量課金 (e4841790-d377-4dcf-9029-1b209f5d4029)'
+    azureSubscription: ResourceManagerConnection
 
-    azureContainerRegistry: k8ssample97c8.azurecr.io
+    azureContainerRegistry: '{"loginServer":"k8ssample97c8.azurecr.io", "id" : "/subscriptions/e4841790-d377-4dcf-9029-1b209f5d4029/resourceGroups/k8sSamplebbd6/providers/Microsoft.ContainerRegistry/registries/k8sSample97c8"}'
 
-    imageName: 'k8ssample97c8.azurecr.io/k8ssample:$(Build.BuildId)'
-
+steps:
 - task: Docker@0
   displayName: 'Push an image'
   inputs:
-    azureSubscription: '従量課金 (e4841790-d377-4dcf-9029-1b209f5d4029)'
+    azureSubscription: ResourceManagerConnection
 
     azureContainerRegistry: '{"loginServer":"k8ssample97c8.azurecr.io", "id" : "/subscriptions/e4841790-d377-4dcf-9029-1b209f5d4029/resourceGroups/k8sSamplebbd6/providers/Microsoft.ContainerRegistry/registries/k8sSample97c8"}'
 
     action: 'Push an image'
-
-    imageName: 'k8ssample97c8.azurecr.io/k8ssample:$(Build.BuildId)'
